@@ -93,7 +93,7 @@
 //!     disp.reset(&mut res, &mut delay).unwrap();
 //!     disp.init().unwrap();
 //!     disp.flush().unwrap();
-//! 
+//!
 //!     let style = MonoTextStyle::new(&FONT_5X8, BinaryColor::On);
 //!
 //!     Text::new("Hello world!", Point::new(0, 0), style).draw(&mut disp).unwrap();
@@ -122,4 +122,4 @@ pub mod mode;
 pub mod prelude;
 pub mod properties;
 
-pub use crate::builder::{Builder, NoOutputPin};
+pub use crate::builder::Builder;

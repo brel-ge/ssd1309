@@ -43,9 +43,6 @@
 //! let display: GraphicsMode<_> = Builder::new().connect(interface).into();
 //! ```
 
-use core::marker::PhantomData;
-use hal::{self, digital::v2::OutputPin};
-
 use crate::{
     displayrotation::DisplayRotation,
     displaysize::DisplaySize,
@@ -95,55 +92,7 @@ impl Builder {
     where
         DI: display_interface::WriteOnlyDataCommand,
     {
-        let properties = DisplayProperties::new(
-            interface,
-            self.display_size,
-            self.rotation,
-        );
+        let properties = DisplayProperties::new(interface, self.display_size, self.rotation);
         DisplayMode::<RawMode<DI>>::new(properties)
-    }
-}
-
-/// Represents an unused output pin.
-#[derive(Clone, Copy)]
-pub struct NoOutputPin<PinE = ()> {
-    _m: PhantomData<PinE>,
-}
-
-impl<PinE> NoOutputPin<PinE> {
-    /// Create a new instance of `NoOutputPin`
-    pub fn new() -> Self {
-        Self { _m: PhantomData }
-    }
-}
-
-impl<PinE> OutputPin for NoOutputPin<PinE> {
-    type Error = PinE;
-    fn set_low(&mut self) -> Result<(), PinE> {
-        Ok(())
-    }
-    fn set_high(&mut self) -> Result<(), PinE> {
-        Ok(())
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::NoOutputPin;
-    use embedded_hal::digital::v2::OutputPin;
-
-    enum SomeError {}
-
-    struct SomeDriver<P: OutputPin<Error = SomeError>> {
-        #[allow(dead_code)]
-        p: P,
-    }
-
-    #[test]
-    fn test_output_pin() {
-        let p = NoOutputPin::new();
-        let _d = SomeDriver { p };
-
-        assert!(true);
     }
 }
